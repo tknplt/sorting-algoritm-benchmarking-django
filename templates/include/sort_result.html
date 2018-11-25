@@ -1,0 +1,25 @@
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th scope="col">Expired</th>
+                <th scope="col">Batch</th>
+                <th scope="col">Data</th>
+                <th scope="col">Create</th>
+            </tr>
+        </thead>
+        <tbody id="veriler">
+            {% for row in result %}
+            <tr>
+                <td>{{row.id}}</td>
+                <td scope="row">{{row.expired_time}}</td>
+                <td>{{row.batch_size}}</td>
+                <td>{{row.data_type}}</td>
+                <td>{{row.create_at}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

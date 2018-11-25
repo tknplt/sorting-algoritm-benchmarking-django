@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-md-12">
+        <form id="sorting" action="{{action}}" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <input type="hidden" value="{{sort_type}}" name="sort_type">
+                <div class="col">
+                    <select class="form-control" id="exampleFormControlSelect1" name="batch_size">
+                        <option value="100">100 Adet</option>
+                        <option value="1000">1.000 Adet</option>
+                        <option value="10000">10.000 Adet</option>
+                        <option value="500000">100.000 Adet</option>
+                        <option value="100000">500.000 Adet</option>
+                        <option value="1000000">1.000.000 Adet</option>
+                        <option value="5000000" selected>5.000.000 Adet</option>
+                    </select>
+                </div>
+                <div class="col">
+                    {% if int_status %}
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="data_type" id="inlineRadio1" value="int" checked>
+                        <label class="form-check-label" for="inlineRadio1">İnt</label>
+                    </div>
+                    {% endif %}
+
+                    {% if float_status %}
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="data_type" id="inlineRadio2" value="float">
+                        <label class="form-check-label" for="inlineRadio2">Float</label>
+                    </div>
+                    {% endif %}
+
+                    {% if string_status %}
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="data_type" id="inlineRadio3" value="string">
+                        <label class="form-check-label" for="inlineRadio3">String</label>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col">
+                    <button type="submit"  class="btn btn-outline-primary btn-block" id="btn-form-send">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

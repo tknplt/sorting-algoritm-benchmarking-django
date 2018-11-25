@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %} Shell Sorting {% endblock %}
+{% load static %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-5"></div>
+        <div class="col-md-1">
+            <div class="cart"> 
+                <a data-toggle="tooltip" data-placement="top"
+                     title="<img src='/static/images/sorting3.png' />">
+                    <i class="fas fa-info"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="cart"> 
+                <a data-toggle="tooltip" data-placement="top" 
+                    title="<img src='/static/images/sorting.png'/>">
+                    <i class="fas fa-info"></i>
+                </a>
+            </div>
+        </div>
+        
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id="myChart" width="400" height="300"></canvas>
+        </div>
+        <div class="col-md-6">
+            <div id="batch"></div>
+            <div id="time"></div>
+            {% include 'include/sort_result.html' %}
+        </div>
+    </div>
+    
+{% endblock %}

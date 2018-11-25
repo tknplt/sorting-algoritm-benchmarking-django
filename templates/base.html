@@ -1,0 +1,114 @@
+{% load static %}
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" >
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+    <title>{% block title %} Sorting {% endblock %}</title>
+  </head>
+  <body>
+    
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Sıralama
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Dashboard</a>
+                <a class="dropdown-item" href="{% url 'sorting:shellsort' %}">Shell Sort</a>
+                <a class="dropdown-item" href="{% url 'sorting:radixsort' %}">Radix Sort</a>              
+                <a class="dropdown-item" href="{% url 'sorting:mergesort_paralel' %}">Merge Sort & Paralel</a>
+                <a class="dropdown-item" href="{% url 'sorting:countsort' %}">Count Sort</a>
+                <a class="dropdown-item" href="{% url 'sorting:quicksort' %}">Quick Sort</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </li>
+          </ul>
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </div>
+      </nav>
+      <br/>
+      <hr/>
+      {% include 'include/form.html' %}
+      <hr/>
+      {% block content %}
+      {% endblock %}
+    </div>
+    <!--
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    -->
+    <script src="{% static 'js/jquery-3.3.1.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}" ></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/Chart.bundle.js' %}"></script>
+    <script src="{% static 'js/Chart.js' %}"></script>
+    {% block js %}
+    {% endblock %}
+    <script>
+      
+      $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip({
+            animated: 'fade',
+            placement: 'bottom',
+            html: true
+        });
+        //console.clear();
+        //console.time("answer time");
+        //console.timeLog("answer time");
+        $('form#sorting').submit(function(event){
+            const action = $(this).attr('action');
+            const csrfmiddlewaretoken = jQuery("[name=csrfmiddlewaretoken]").val();
+            const batch_size = $('select[name="batch_size"]').val();
+            const data_type = $('[name=data_type]:checked').val();
+            const sort_type = $('input[name="sort_type"]').val();
+
+            $('button#btn-form-send').text('Prosesing...').attr('disabled', 'disabled');
+            $.post( "/sorting/"+action, 
+                  {
+                    batch_size:batch_size, data_type:data_type,
+                    sort_type, csrfmiddlewaretoken:csrfmiddlewaretoken
+                  }, 
+                  function( data ) {
+                    $('div#batch').html('<div class="alert alert-info" role="alert">Eklenme Sayısı : '+batch_size+' Adet</div>');
+                    $('div#time').html('<div class="alert alert-info" role="alert">Bitiş Süresi: '+data.time+' saniye</div>');            
+                     console.table(data);
+                     //pprint(data);
+                    if (data.status){
+                      var html = "<tr>";
+                          html += '<td>'+data.id+'</td>';
+                          html += '<td scope="row">'+data.time+'</td>';
+                          html += '<td>'+batch_size+'</td>';
+                          html += '<td>'+data_type+'</td>';
+                          html += '<td>'+((new Date()).getTime())+'</td>';
+                        html += "</tr>";
+                        $("tbody#veriler").prepend(html); 
+                    }
+                    
+
+                    $('button#btn-form-send').text('Send').removeAttr('disabled');
+
+                    
+                    
+            }, 'json');
+            return false;
+        });
+        //:screenshot --filename 'sorting.png'  
+        //console.timeEnd("answer time");
+      });
+    </script>
+  </body>
+</html>
