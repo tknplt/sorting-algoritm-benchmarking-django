@@ -25,70 +25,6 @@ def shellshortprinter(request):
     return JsonResponse({'data':data})
 
 
-
-
-def shellsort_execute(request):
-
-    batch_size = int(request.POST.get('batch_size', None))
-    data_type = request.POST.get('data_type', None)
-
-    if data_type == 'int':
-        arr = [randint(0, 100000) for i in range(batch_size)]
-    elif data_type == 'float':
-        arr = [random.random() for i in range(batch_size)]
-    elif data_type == 'string':
-        arr = [_random_string() for i in range(batch_size)]
-    start = time.time()
-    shellSort(arr)
-    end = time.time() - start
-
-    for i in range(batch_size): 
-        print(i, arr[i])
-
-    ekle = Sorting(expired_time=end, batch_size=batch_size, data_type=data_type, 
-                    sorting_type='shellsort', create_at=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-    ekle.save()
-
-    return JsonResponse({'status':True, 'message':'id'})
-
-
-
-
-
-
-#merge sort
-
-def mergesort(request):
-    context = {
-        'action':'mergesort_execute',
-        'result':Sorting.objects.filter(sorting_type='mergesort').
-                    values('expired_time', 'batch_size', 'data_type', 'create_at').order_by('-id')
-    }
-    return render(request, 'sorting/sorting.html', context)
-
-def mergesort_execute(request):
-    batch_size = int(request.POST.get('batch_size', None))
-    data_type = request.POST.get('data_type', None)
-
-    if data_type == 'int':
-        arr = [randint(0, 100000) for i in range(batch_size)]
-    elif data_type == 'float':
-        arr = [random.random() for i in range(batch_size)]
-    elif data_type == 'string':
-        arr = [_random_string() for i in range(batch_size)]
-    start = time.time()
-    _mergeSort(arr)
-    end = time.time() - start
-
-    dd(arr)
-
-    ekle = Sorting(expired_time=end, batch_size=batch_size, data_type=data_type, 
-                    sorting_type='mergesort', create_at=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-    ekle.save()
-
-    return JsonResponse({'status':True, 'time':end})
-
-
 #merge sort parelel
 
 def mergesort_paralel(request):
@@ -129,6 +65,9 @@ def shellsort(request):
     context = {
         'action':'sorting_execute',
         'sort_type':'shellsort',
+        'int_status' : True,
+        'float_status' : True,
+        'string_status' : True,
         'result':Sorting.objects.filter(sorting_type='shellsort')
             .values('expired_time', 'batch_size', 'data_type', 'create_at').order_by('-id')
     }
@@ -139,6 +78,9 @@ def radixsort(request):
     context = {
         'action':'sorting_execute',
         'sort_type':'radixsort',
+        'int_status' : True,
+        'float_status' : True,
+        'string_status' : True,
         'result':Sorting.objects.filter(sorting_type='radixsort').values('id', 'expired_time', 'batch_size', 'data_type', 'create_at').order_by('-id')
     }
     return render(request, 'sorting/sorting.html', context)
@@ -187,6 +129,8 @@ def sorting_execute(request):
         arr = _countSort(arr, max(arr))
     elif sort_type == 'radixsort':
         _radixSort(arr)
+    elif sort_type == 'shellsory':
+        shellSort(arr)
     end = time.time() - start
 
     dd(arr)
