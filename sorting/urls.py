@@ -5,12 +5,9 @@ app_name = 'sorting'
 urlpatterns = [
     path('shellsort', views.shellsort, name='shellsort'),
     path('shellshortprinter', views.shellshortprinter, name='shellshortprinter'),
-    path('shellsort_execute', views.shellsort_execute, name='shellsort_execute'),
 
     path('radixsort', views.radixsort, name='radixsort'),
 
-    path('mergesort', views.mergesort, name='mergesort'),
-    path('mergesort_execute', views.mergesort_execute, name='mergesort_execute'),
 
     path('mergesort_paralel', views.mergesort_paralel, name='mergesort_paralel'),
     path('mergesort_paralel_execute', views.mergesort_paralel_execute, name='mergesort_paralel_execute'),
