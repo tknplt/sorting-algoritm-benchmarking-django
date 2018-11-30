@@ -73,18 +73,7 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'sorting',
-        'USER': 'root',
-        'PASSWORD': '2121',
-        'HOST': '127.0.0.1',   # Or an IP Address that your DB is hosted on
-        'PORT': '3306',
-    }
-}
-"""
+
 
 DATABASES = {
     'default': {
@@ -94,6 +83,14 @@ DATABASES = {
         'PASSWORD': 'postgres',
         'HOST': 'localhost',
         'PORT': '',
+    },
+    'mysql': {
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'sorting',
+        'USER': 'root',
+        'PASSWORD': '2121',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 

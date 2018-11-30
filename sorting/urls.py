@@ -14,6 +14,7 @@ urlpatterns = [
 
     path('countsort', views.countsort, name='countsort'),
     path('quicksort', views.quicksort, name='quicksort'),
+    path('selectionsort', views.selectionsort, name='selectionsort'),
 
 
 

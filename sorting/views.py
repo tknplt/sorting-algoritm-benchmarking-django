@@ -13,7 +13,10 @@ from helper.mergesort import _mergeSort
 from helper.mergesortparalel import merge_sort, merge_sort_parallel
 from helper.countsort import _countSort
 from helper.quicksort import _quickSort
+from helper.selectionsort import _selectionSort
 from helper.debug import dd
+
+from helper.signal import *
 
 def shellshortprinter(request):
     result = Sorting.objects.filter(sorting_type='shellsort').values('data_type').annotate(expired=Avg('expired_time'))
@@ -61,6 +64,8 @@ def mergesort_paralel_execute(request):
     dd(sort(arr))
     return JsonResponse({'status':True, 'time':endfor})
 
+
+#radix sort
 def shellsort(request):
     context = {
         'action':'sorting_execute',
@@ -111,6 +116,19 @@ def quicksort(request):
     }
     return render(request, 'sorting/sorting.html', context)
 
+#selection-sort
+def selectionsort(request):
+    context = {
+        'action':'sorting_execute',
+        'sort_type':'selectionsort',
+        'int_status' : True,
+        'float_status' : True,
+        'string_status' : True,
+        'result':Sorting.objects.filter(sorting_type='selectionsort').values('id','expired_time', 'batch_size', 'data_type', 'create_at')
+    }
+    return render(request, 'sorting/sorting.html', context)
+
+
 def sorting_execute(request):
     batch_size = int(request.POST.get('batch_size', None))
     data_type = request.POST.get('data_type', None)
@@ -129,8 +147,10 @@ def sorting_execute(request):
         arr = _countSort(arr, max(arr))
     elif sort_type == 'radixsort':
         _radixSort(arr)
-    elif sort_type == 'shellsory':
+    elif sort_type == 'shellsort':
         shellSort(arr)
+    elif sort_type == 'selectionsort':
+        _selectionSort(arr)
     end = time.time() - start
 
     dd(arr)
@@ -138,4 +158,5 @@ def sorting_execute(request):
     ekle = Sorting(expired_time=end, batch_size=batch_size, data_type=data_type, 
                     sorting_type=sort_type, create_at=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     ekle.save()
+    ekle.save(using='mysql')
     return JsonResponse({'status':True, 'time':end, 'id':ekle.id})
